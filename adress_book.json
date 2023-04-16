@@ -1,0 +1,16 @@
+{
+    "Anatolii": {
+       "name": "Anatolii",
+       "phones": [
+          888987654032
+       ],
+       "birthday": "2001.04.12"
+    },
+    "Vasia": {
+       "name": "Vasia",
+       "phones": [
+          666666666666
+       ],
+       "birthday": "1992.05.23"
+    }
+ }
