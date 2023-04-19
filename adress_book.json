@@ -33,5 +33,19 @@
          "132819421872"
       ],
       "birthday": null
+   },
+   "Kolya": {
+      "name": "Kolya",
+      "phones": [
+         "132890092832"
+      ],
+      "birthday": "1998.10.07"
+   },
+   "Bonifacii": {
+      "name": "Bonifacii",
+      "phones": [
+         "909876092381"
+      ],
+      "birthday": "1992.10.02"
    }
 }

@@ -103,11 +103,20 @@ def get_birthday(*args):
 @input_error
 def get_number(*args):
     lst = list_of_params(*args)
+    list_of_contacts = {}
     
     for k, v in adress_book.items():
         if lst[0] == k:
-            return f'{lst[0]}: {v.phones}'
+            return f'{lst[0]}: {str(*v.phones)}'
         
+        if str(*v.phones).startswith(lst[0]):
+            list_of_contacts.update({k: str(*v.phones)})
+        
+        if k.startswith(lst[0]):
+            list_of_contacts.update({k: str(*v.phones)})
+
+    if list_of_contacts:
+        return list_of_contacts
     return f'Not contacts {lst[0]}'
 
 
