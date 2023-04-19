@@ -4,6 +4,7 @@ import json
 from json import JSONDecodeError
 
 
+
 class Field:
     def __init__(self, value):
 
@@ -17,9 +18,10 @@ class Field:
     def __repr__(self) -> str:
         return str(self)
     
+    def to_json(self):
+        return self.__str__()
     
-
-
+    
 class Record(Field):
 
     def __init__(self, name, phone=None, birthday=None):
@@ -55,6 +57,8 @@ class Phone(Field):
 
     def __init__(self, value):
         self.__value = None
+        if isinstance(value, list):
+            self.value = value
         self.value = value
 
     @property
@@ -63,9 +67,10 @@ class Phone(Field):
     
     @value.setter
     def value(self, value):
-        if not isinstance(value, int):
+        if not isinstance(value, (int, list)):
             raise ValueError('Must be a interger')
-        if len(str(value)) != 12:
+        
+        if not isinstance(value, list) and len(str(value)) != 12:
             raise ValueError('Number must have only 12 number')
         self.__value = value
 
@@ -92,26 +97,29 @@ class Name(Field):
 class Birthday(Field):
 
     def __init__(self, value):
-
-        try:
-            self.value = datetime.strptime(value, '%Y.%m.%d')
-        except ValueError:
-            print('It is not a data. Try year.month.day')
+        if value:
+            try:
+                self.value = datetime.strptime(value, '%Y.%m.%d')
+            except ValueError:
+                print('It is not a data. Try year.month.day')
 
 
 class RecordEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, (Name, Phone)):
-            return obj.value
+
+        if isinstance(obj, Record):
+            return obj.__dict__
+        
         if isinstance(obj, Birthday):
             return obj.value.strftime('%Y.%m.%d')
-        return json.JSONEncoder.default(self, obj)
+        
+        return obj.to_json()
     
             
 class AdressBook(UserDict):
+
     def add_contact(self, contact:Record):
-        if contact:
-            self.data[contact.name.value] = contact
+        self.data[contact.name.value] = contact
 
     def paginator(self, iter_obj, page=2):
         start = 0
@@ -125,36 +133,24 @@ class AdressBook(UserDict):
             yield result
             start += page
 
-    @staticmethod
-    def recover_from_file():
+    def recover_from_file(self):
+        try:
+            with open('adress_book.json') as fd:
+                data = json.load(fd)
+        except (FileNotFoundError, AttributeError, JSONDecodeError, ValueError):
+            return {}
         
-        with open('adress_book.json') as fd:
-            r = json.load(fd)
-        
-        val = []
-        for v in r.values():
-            val.append([i for i in v.values()])
-
-        def record_to_dict():
-            try:
-                recover = Record(Name(val[0][0]), Phone(*val[0][1]), Birthday(val[0][2]))
-                val.pop(0)
-                if val:
-                    return record_to_dict()
-                else:
-                    return recover
-            except (FileNotFoundError, AttributeError, JSONDecodeError):
-                return "Now"
-            
-        return record_to_dict()
-    
+        for k, v in data.items():
+            if v['birthday']:
+                self.add_contact(Record(Name(v['name']), Phone(int(*v['phones'])), Birthday(v['birthday'])))
+            else:
+                self.add_contact(Record(Name(v['name']), Phone(int(*v['phones']))))
 
     def save_to_file(self):
 
         with open('adress_book.json', "w") as fd:
             if self.data:
-                json.dump({k: self[k].__dict__ for k in self}, fd, cls=RecordEncoder, indent=3)
-
+                json.dump(self.data, fd, cls=RecordEncoder, indent=3)
 
 
 if __name__ == '__main__':

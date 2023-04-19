@@ -2,6 +2,7 @@ from operation import AdressBook, Record, Name, Phone, Birthday
 
 
 adress_book = AdressBook()
+adress_book.recover_from_file()
 
 
 def input_error(func):
@@ -149,7 +150,7 @@ def command_handler(text: str):
 
 
 def main():
-    adress_book.add_contact(AdressBook.recover_from_file())
+
     while True:
 
         user_input = input('>>> ')

@@ -1,16 +1,37 @@
 {
-    "Anatolii": {
-       "name": "Anatolii",
-       "phones": [
-          888987654032
-       ],
-       "birthday": "2001.04.12"
-    },
-    "Vasia": {
-       "name": "Vasia",
-       "phones": [
-          666666666666
-       ],
-       "birthday": "1992.05.23"
-    }
- }
+   "Boris": {
+      "name": "Boris",
+      "phones": [
+         "123490892834"
+      ],
+      "birthday": null
+   },
+   "vasia": {
+      "name": "vasia",
+      "phones": [
+         "879609283412"
+      ],
+      "birthday": "2001.01.23"
+   },
+   "Vika": {
+      "name": "Vika",
+      "phones": [
+         "489876239412"
+      ],
+      "birthday": null
+   },
+   "Mira": {
+      "name": "Mira",
+      "phones": [
+         "142142980782"
+      ],
+      "birthday": "1993.10.07"
+   },
+   "Gena": {
+      "name": "Gena",
+      "phones": [
+         "132819421872"
+      ],
+      "birthday": null
+   }
+}
